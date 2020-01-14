@@ -1,6 +1,8 @@
 package com.company;
 
-public abstract class Person {
+import java.io.Serializable;
+
+public abstract class Person implements Serializable {
 
     private String name, password, email;
 
@@ -9,8 +11,6 @@ public abstract class Person {
         this.password = password;
         this.email = email;
     }
-
-
 
     public String getName() {
         return name;

@@ -1,18 +1,23 @@
 package com.company;
 
+import java.io.File;
+import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Library {
+public class Library implements Serializable {
     private ArrayList<Book> booksInLibrary = new ArrayList<>();
-    private ArrayList<User> users = new ArrayList<>();
-    private ArrayList<Admin> admins = new ArrayList<>();
+    private ArrayList<Person> users = new ArrayList<>();
     private transient Scanner scanner = new Scanner(System.in);
     private User currentUser;
+    private Admin currentAdmin;
 
     public Library() {
+        loadProgress();
         addStartingBooksAndAdminToLibrary();
         logInOrRegisterMenu();
     }
@@ -31,6 +36,9 @@ public class Library {
                     break;
                 case "2":
                     registerUser();
+                    break;
+                default:
+                    System.out.println("Incorrect input. You must enter number '1' or '2'");
                     break;
             }
         }
@@ -52,37 +60,58 @@ public class Library {
                     System.out.println("___________________________");
                     System.out.println("Enter book title or author:");
                     String titleOrAuthor = scanner.nextLine();
-                    findBookByTitleOrAuthor(titleOrAuthor, booksInLibrary);
-                    currentUser.borrowBook(findBookByTitleOrAuthor(titleOrAuthor, booksInLibrary));
+                    currentUser.findBookByTitleOrAuthor(titleOrAuthor, booksInLibrary);
+                    currentUser.borrowBook(currentUser.findBookByTitleOrAuthor(titleOrAuthor, booksInLibrary));
                     break;
                 case "2":
                     showAllBooks(booksInLibrary);
                     break;
                 case "3":
+                    showAvailableBooks();
                     break;
                 case "4":
+                    System.out.println("Enter book title or author: ");
+                    String searchedBook = scanner.nextLine();
+                    System.out.println(currentUser.findBookByTitleOrAuthor(searchedBook, booksInLibrary));
+                    System.out.println("Summary: ");
+                    System.out.println(currentUser.findBookByTitleOrAuthor(searchedBook, booksInLibrary).getSummary());
                     break;
                 case "5":
+                    currentUser.userInfoMenu(currentUser);
                     break;
                 case "6":
+                    FileUtility.writeObject(this, "saveStoreProgress.ser");
                     System.out.println("Hope to see you soon!");
                     System.exit(0);
+                    break;
+                default:
+                    System.out.println("Incorrect input.");
                     break;
             }
         }
     }
 
-    private void showAvailableBooks(){
-        for(Book book : booksInLibrary){
-            if(book.isAvailable()){
+    private void loadProgress() {
+
+        Path file = new File("saveStoreProgress.ser").toPath();
+        if (Files.exists(file)) {
+            Library libraryFromFile = (Library) FileUtility.readObject("saveStoreProgress.ser");
+            this.users = libraryFromFile.users;
+            this.booksInLibrary = libraryFromFile.booksInLibrary;
+        }
+    }
+
+    private void showAvailableBooks() {
+        for (Book book : booksInLibrary) {
+            if (book.isAvailable()) {
                 System.out.println(book);
             }
         }
     }
 
-    private Book findBookByName(String name){
-        for(Book book : booksInLibrary){
-            if(name.equals(book.getTitle())){
+    private Book findBookByName(String name) {
+        for (Book book : booksInLibrary) {
+            if (name.equals(book.getTitle())) {
                 return book;
             }
         }
@@ -114,6 +143,7 @@ public class Library {
                 } else {
                     users.add(new User(username, password, emailAddress));
                     System.out.println("User successfully registered!");
+                    System.out.println(users);
                 }
             }
         }
@@ -124,13 +154,20 @@ public class Library {
         String username = scanner.nextLine();
         System.out.println("Enter password:");
         String password = scanner.nextLine();
-        for (User user : users) {
-            if (username.equals(user.getName()) && password.equals(user.getPassword())) {
-                System.out.println("Welcome back " + username + "!");
-                currentUser = user;
-                mainMenu();
-            } else {
+        for (Person user : users) {
+            if(!username.equals(user.getName()) && !password.equals(user.getPassword())){
                 System.out.println("Password or username incorrect. Try again.");
+            } else {
+                if (username.equals("Admin") && password.equals("admin")) {
+                    currentAdmin = (Admin) user;
+                    System.out.println("Welcome back, Librarian!");
+                    break;
+                } else {
+                    System.out.println("Welcome back, " + username + "!");
+                    currentUser = (User) user;
+                    mainMenu();
+                    break;
+                }
             }
         }
     }
@@ -141,14 +178,7 @@ public class Library {
         }
     }
 
-    public Book findBookByTitleOrAuthor(String name, ArrayList<Book> arrayList){
-        for(Book book : arrayList){
-            //To lowerCase makes both, name and product name to small letters
-            if(book.getTitle().toLowerCase().contains(name.toLowerCase()) || book.getWriter().toLowerCase().contains(name.toLowerCase()))
-                return book;
-        }
-        return null;
-    }
+
 
     private void addBookToLibrary(String name, String writer, String summary) {
         booksInLibrary.add(new Book(name, writer, summary));
@@ -165,6 +195,6 @@ public class Library {
         booksInLibrary.add(new Book("The Reason I Jump", "Naoki Higashida", "This book is an autobiography written by a 13-year-old boy from Japan about what it is like to live with autism."));
         booksInLibrary.add(new Book("The Richest Man in Babylon", "George S. Clason", "Save at least 10 percent of everything you earn and do not confuse your necessary expenses with your desires."));
         booksInLibrary.add(new Book("Java For Dummies 7th Edition", "Barry Burd", "A new edition of the bestselling guide to Java If you want to learn to speak the world s most popular programming language like a native, Java For Dummies is your ideal companion"));
-        admins.add(new Admin("Admin", "admin", "admin@bookworms.com"));
+        users.add(new Admin("Admin", "admin", "admin@bookworms.com"));
     }
 }

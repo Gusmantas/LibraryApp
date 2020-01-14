@@ -1,10 +1,9 @@
 package com.company;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
-
-public class Book {
+public class Book implements Serializable {
 
     private String title, writer, summary;
     private boolean isAvailable = true;
@@ -18,14 +17,12 @@ public class Book {
     }
 
     public void startReminder() {
-        System.out.println(deadline);
         if (currentTime == deadline) {
             System.out.printf("Time for %s is over!", title);
         }
     }
 
-
-    public void showDueTime(){
+    public void showDueTime() {
         System.out.println(deadline.toLocalDate());
     }
 
