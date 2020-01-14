@@ -1,6 +1,7 @@
 package com.company;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 
 public class Book {
@@ -22,6 +23,7 @@ public class Book {
             System.out.printf("Time for %s is over!", title);
         }
     }
+
 
     public void showDueTime(){
         System.out.println(deadline.toLocalDate());
@@ -49,6 +51,14 @@ public class Book {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
     }
 
     @Override

@@ -1,18 +1,16 @@
 package com.company;
 
-import jdk.swing.interop.SwingInterOpUtils;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Library {
-
     private ArrayList<Book> booksInLibrary = new ArrayList<>();
-    private ArrayList<Person> registeredUsers = new ArrayList<>();
+    private ArrayList<User> users = new ArrayList<>();
+    private ArrayList<Admin> admins = new ArrayList<>();
     private transient Scanner scanner = new Scanner(System.in);
-    private Person currentUser;
+    private User currentUser;
 
     public Library() {
         addStartingBooksAndAdminToLibrary();
@@ -43,12 +41,19 @@ public class Library {
         while (isMenuOn) {
             System.out.println("[1] Borrow a book");
             System.out.println("[2] See all books");
-            System.out.println("[3] Search for books");
-            System.out.println("[4] My page");
-            System.out.println("[5] Exit store");
+            System.out.println("[3] See available books");
+            System.out.println("[4] Search for books");
+            System.out.println("[5] My page");
+            System.out.println("[6] Exit store");
             String userInput = scanner.nextLine();
             switch (userInput) {
                 case "1":
+                    showAvailableBooks();
+                    System.out.println("___________________________");
+                    System.out.println("Enter book title or author:");
+                    String titleOrAuthor = scanner.nextLine();
+                    findBookByTitleOrAuthor(titleOrAuthor, booksInLibrary);
+                    currentUser.borrowBook(findBookByTitleOrAuthor(titleOrAuthor, booksInLibrary));
                     break;
                 case "2":
                     showAllBooks(booksInLibrary);
@@ -58,11 +63,31 @@ public class Library {
                 case "4":
                     break;
                 case "5":
+                    break;
+                case "6":
                     System.out.println("Hope to see you soon!");
-                    isMenuOn = false;
+                    System.exit(0);
                     break;
             }
         }
+    }
+
+    private void showAvailableBooks(){
+        for(Book book : booksInLibrary){
+            if(book.isAvailable()){
+                System.out.println(book);
+            }
+        }
+    }
+
+    private Book findBookByName(String name){
+        for(Book book : booksInLibrary){
+            if(name.equals(book.getTitle())){
+                return book;
+            }
+        }
+        System.out.println("Error! Book not found!");
+        return null;
     }
 
     private void registerUser() {
@@ -87,7 +112,7 @@ public class Library {
                 if (!password.equals(repeatedPassword)) {
                     System.out.println("Passwords do not match, try again.");
                 } else {
-                    registeredUsers.add(new User(username, password, emailAddress));
+                    users.add(new User(username, password, emailAddress));
                     System.out.println("User successfully registered!");
                 }
             }
@@ -99,10 +124,11 @@ public class Library {
         String username = scanner.nextLine();
         System.out.println("Enter password:");
         String password = scanner.nextLine();
-        for (Person user : registeredUsers) {
+        for (User user : users) {
             if (username.equals(user.getName()) && password.equals(user.getPassword())) {
                 System.out.println("Welcome back " + username + "!");
                 currentUser = user;
+                mainMenu();
             } else {
                 System.out.println("Password or username incorrect. Try again.");
             }
@@ -113,6 +139,15 @@ public class Library {
         for (Book book : books) {
             System.out.println(book);
         }
+    }
+
+    public Book findBookByTitleOrAuthor(String name, ArrayList<Book> arrayList){
+        for(Book book : arrayList){
+            //To lowerCase makes both, name and product name to small letters
+            if(book.getTitle().toLowerCase().contains(name.toLowerCase()) || book.getWriter().toLowerCase().contains(name.toLowerCase()))
+                return book;
+        }
+        return null;
     }
 
     private void addBookToLibrary(String name, String writer, String summary) {
@@ -130,8 +165,6 @@ public class Library {
         booksInLibrary.add(new Book("The Reason I Jump", "Naoki Higashida", "This book is an autobiography written by a 13-year-old boy from Japan about what it is like to live with autism."));
         booksInLibrary.add(new Book("The Richest Man in Babylon", "George S. Clason", "Save at least 10 percent of everything you earn and do not confuse your necessary expenses with your desires."));
         booksInLibrary.add(new Book("Java For Dummies 7th Edition", "Barry Burd", "A new edition of the bestselling guide to Java If you want to learn to speak the world s most popular programming language like a native, Java For Dummies is your ideal companion"));
-        registeredUsers.add(new Admin("Admin", "admin", "admin@bookworms.com"));
+        admins.add(new Admin("Admin", "admin", "admin@bookworms.com"));
     }
-
-
 }
