@@ -13,15 +13,21 @@ public class User extends Person {
     }
 
 
-    private void showBorrowedBooks() {
-        for (Book book : borrowedBooks) {
-            System.out.println(book);
+    public void showBorrowedBooks() {
+        if (!borrowedBooks.isEmpty()) {
+            for (Book book : borrowedBooks) {
+                System.out.println(book);
+            }
+        } else {
+            System.out.println("There isn't any borrowed books yet.");
         }
     }
+
 
     public void userInfoMenu(User user) {
         System.out.println("[1] See my borrowed books");
         System.out.println("[2] See due time for a book");
+        System.out.println("[3] Return a book");
         String userInput = scanner.nextLine();
         switch (userInput) {
             case "1":
@@ -30,21 +36,47 @@ public class User extends Person {
             case "2":
                 getDueTimeOfBook();
                 break;
+            case "3":
+                try {
+                    System.out.println("Enter title of the book you wish to return: ");
+                    String bookTitle = scanner.nextLine();
+                    returnBookToLibrary(findBookByTitleOrAuthor(bookTitle, borrowedBooks));
+                } catch (Exception ex) {
+                    System.out.println("Book could not be found.");
+                }
+                break;
             default:
                 System.out.println("Incorrect input.");
                 break;
-
         }
     }
 
-    private void getDueTimeOfBook(){
+    public void returnBookToLibrary(Book book) {
+        borrowedBooks.remove(book);
+        book.setAvailable(true);
+        System.out.println(book.getTitle() + " returned to library");
+    }
+
+    public Book searchBookByName(String name) {
+        for (Book book : borrowedBooks) {
+            if (name.equals(book.getTitle())) {
+                return book;
+            }
+        }
+        System.out.println(name + " not found.");
+        return null;
+    }
+
+    private void getDueTimeOfBook() {
         try {
             showBorrowedBooks();
             System.out.println("Enter title of a book: ");
             String bookTitle = scanner.nextLine();
             System.out.println("Book to be returned on: ");
             findBookByTitleOrAuthor(bookTitle, borrowedBooks).showDueTime();
-        }catch(Exception ex){
+            //Not sure about this one. How to display reminder for an overdue book?
+            findBookByTitleOrAuthor(bookTitle, borrowedBooks).startReminder();
+        } catch (Exception ex) {
             System.out.println("Book title incorrect. Try again.");
         }
     }
@@ -54,10 +86,9 @@ public class User extends Person {
             if (book.getTitle().toLowerCase().contains(name.toLowerCase()) || book.getWriter().toLowerCase().contains(name.toLowerCase()))
                 return book;
         }
+        System.out.println(name + " not found.");
         return null;
     }
-
-
 
     public void borrowBook(Book book) {
         if (book != null) {
@@ -71,5 +102,11 @@ public class User extends Person {
             System.out.println("Error! Book could not be found.");
         }
     }
+
+    public ArrayList<Book> getBorrowedBooks() {
+        return borrowedBooks;
+    }
+
+
 }
 

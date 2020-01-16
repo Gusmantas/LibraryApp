@@ -149,20 +149,22 @@ public class Library implements Serializable {
         }
     }
 
+
     private void logInUser() {
         System.out.println("Enter username: ");
         String username = scanner.nextLine();
         System.out.println("Enter password:");
         String password = scanner.nextLine();
         for (Person user : users) {
-            if(!username.equals(user.getName()) && !password.equals(user.getPassword())){
-                System.out.println("Password or username incorrect. Try again.");
-            } else {
-                if (username.equals("Admin") && password.equals("admin")) {
+            if (username.equals(user.getName()) && password.equals(user.getPassword())) {
+                if (user instanceof Admin) {
                     currentAdmin = (Admin) user;
                     System.out.println("Welcome back, Librarian!");
+                    currentAdmin.adminMenu(users, booksInLibrary);
+                    FileUtility.writeObject(this, "saveStoreProgress.ser");
+                    System.exit(0);
                     break;
-                } else {
+                } else if (user instanceof User) {
                     System.out.println("Welcome back, " + username + "!");
                     currentUser = (User) user;
                     mainMenu();
@@ -170,19 +172,13 @@ public class Library implements Serializable {
                 }
             }
         }
+        System.out.println("Password or username incorrect. Try again.");
     }
 
     private void showAllBooks(ArrayList<Book> books) {
         for (Book book : books) {
             System.out.println(book);
         }
-    }
-
-
-
-    private void addBookToLibrary(String name, String writer, String summary) {
-        booksInLibrary.add(new Book(name, writer, summary));
-        System.out.println("Book added to library collection");
     }
 
     private void addStartingBooksAndAdminToLibrary() {
@@ -196,5 +192,7 @@ public class Library implements Serializable {
         booksInLibrary.add(new Book("The Richest Man in Babylon", "George S. Clason", "Save at least 10 percent of everything you earn and do not confuse your necessary expenses with your desires."));
         booksInLibrary.add(new Book("Java For Dummies 7th Edition", "Barry Burd", "A new edition of the bestselling guide to Java If you want to learn to speak the world s most popular programming language like a native, Java For Dummies is your ideal companion"));
         users.add(new Admin("Admin", "admin", "admin@bookworms.com"));
+        users.add(new User("Mantas", "zz", "s@d"));
     }
 }
+

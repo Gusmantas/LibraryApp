@@ -24,4 +24,9 @@ public abstract class Person implements Serializable {
         return email;
     }
 
+    @Override
+    public String toString() {
+        return "User: " + "Username: " + name + ", email: " + email;
+
+    }
 }

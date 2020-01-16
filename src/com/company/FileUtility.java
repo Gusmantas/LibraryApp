@@ -7,10 +7,10 @@ import java.io.ObjectOutputStream;
 
 public class FileUtility {
 
-    public static void writeObject(Object object, String fileName){
+    public static void writeObject(Object object, String fileName) {
         ObjectOutputStream objectOutputStream = null;
         FileOutputStream fileOutputStream = null;
-        try{
+        try {
             fileOutputStream = new FileOutputStream(fileName, false);
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(object);
@@ -21,14 +21,14 @@ public class FileUtility {
     }
 
     //Read Object from file
-    public static Object readObject(String fileName){
+    public static Object readObject(String fileName) {
         ObjectInputStream objectinputstream = null;
         Object object = null;
         try {
             FileInputStream streamIn = new FileInputStream(fileName);
             objectinputstream = new ObjectInputStream(streamIn);
             object = objectinputstream.readObject();
-            objectinputstream .close();
+            objectinputstream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
