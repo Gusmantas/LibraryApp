@@ -3,7 +3,6 @@ package com.company;
 import java.io.Serializable;
 
 public abstract class Person implements Serializable {
-
     private String name, password, email;
 
     public Person(String name, String password, String email) {
@@ -20,9 +19,6 @@ public abstract class Person implements Serializable {
         return password;
     }
 
-    public String getEmail() {
-        return email;
-    }
 
     @Override
     public String toString() {

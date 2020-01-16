@@ -13,7 +13,8 @@ public class Admin extends Person {
         Scanner scanner = new Scanner(System.in);
         boolean isRunning = true;
         while (isRunning) {
-            System.out.println("[1] See borrowed books");
+            System.out.println("------------------------------------");
+            System.out.println("[1] See books");
             System.out.println("[2] Add new book");
             System.out.println("[3] Remove book");
             System.out.println("[4] See all users, or search for one");
@@ -23,7 +24,16 @@ public class Admin extends Person {
             String adminInput = scanner.nextLine();
             switch (adminInput) {
                 case "1":
+                    System.out.println("[1] See all books");
+                    System.out.println("[2] See borrowed books");
+                    String chooseBooks = scanner.nextLine();
+                    if(chooseBooks.equals("1")){
+                        printAllLibraryBooks(libraryBooks);
+                    }else if(chooseBooks.equals("2")){
                     seeBorrowedBooks(libraryBooks);
+                    }else{
+                        System.out.println("Incorrect input. Try again.");
+                    }
                     break;
                 case "2":
                     System.out.println("Enter Title: ");
@@ -42,10 +52,10 @@ public class Admin extends Person {
                     break;
                 case "4":
                     printAllUsers(listOfUsers);
-                    System.out.println("[1] Search for user and see his/hers borrowed books: ");
-                    System.out.println("To exit, hit <enter>");
+                    System.out.println("__________________________________________________________________________");
+                    System.out.println("[1] Search for user and see his/hers borrowed books. To exit, hit <ENTER> ");
                     String adminChoice = scanner.nextLine();
-                    try {
+                   try {
                         if (adminChoice.equals("1")) {
                             System.out.println("Enter username: ");
                             String username = scanner.nextLine();
@@ -53,7 +63,6 @@ public class Admin extends Person {
                             System.out.println("____________________________");
                             System.out.println("Books borrowed by " + user.getName() + ": ");
                             user.showBorrowedBooks();
-                            System.out.println("\n");
                             System.out.println("____________________________");
                         }
                     } catch (NullPointerException ex) {
@@ -63,11 +72,11 @@ public class Admin extends Person {
                 case "5":
                     printUsersAndTheirBorrowedBooks(listOfUsers);
                     break;
-
                 case "6":
                     printAllUsers(listOfUsers);
                     try {
-                        System.out.println("Enter username of a user u wish to remove: ");
+                        System.out.println("_____________________________________________");
+                        System.out.println("Enter username of a user you wish to remove: ");
                         String userToRemove = scanner.nextLine();
                         listOfUsers.remove(getUserByName(listOfUsers, userToRemove));
                         System.out.println(userToRemove + " removed successfully.");
@@ -112,6 +121,8 @@ public class Admin extends Person {
     private void printAllLibraryBooks(ArrayList<Book> books) {
         for (Book book : books) {
             System.out.println(book);
+            System.out.println(book.getSummary());
+            System.out.println("_________________________________________________");
         }
     }
 

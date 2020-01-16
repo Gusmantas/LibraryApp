@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,12 +46,14 @@ public class Library implements Serializable {
     private void mainMenu() {
         boolean isMenuOn = true;
         while (isMenuOn) {
+            System.out.println("-----------------------");
             System.out.println("[1] Borrow a book");
             System.out.println("[2] See all books");
             System.out.println("[3] See available books");
             System.out.println("[4] Search for books");
-            System.out.println("[5] My page");
-            System.out.println("[6] Exit store");
+            System.out.println("[5] Sort available books");
+            System.out.println("[6] My page");
+            System.out.println("[7] Exit store");
             String userInput = scanner.nextLine();
             switch (userInput) {
                 case "1":
@@ -77,9 +78,23 @@ public class Library implements Serializable {
                     System.out.println(currentUser.findBookByTitleOrAuthor(searchedBook, booksInLibrary).getSummary());
                     break;
                 case "5":
-                    currentUser.userInfoMenu();
+                    System.out.println("[1] Sort books by title");
+                    System.out.println("[2] Sort books by author");
+                    String sortBooksByTitleOrAuthor = scanner.nextLine();
+                    if(sortBooksByTitleOrAuthor.equals("1")){
+                        Objects.requireNonNull(returnAvailableBooksList()).sort(Comparator.comparing(Book::getTitle));
+                        printSortedBooks();
+                    }else if(sortBooksByTitleOrAuthor.equals("2")){
+                        Objects.requireNonNull(returnAvailableBooksList()).sort(Comparator.comparing(Book::getWriter));
+                        printSortedBooks();
+                    }else{
+                        System.out.println("Incorrect input. Try again.");
+                    }
                     break;
                 case "6":
+                    currentUser.userInfoMenu();
+                    break;
+                case "7":
                     FileUtility.writeObject(this, "saveLibrary.ser");
                     System.out.println("Hope to see you soon!");
                     System.exit(0);
@@ -88,6 +103,25 @@ public class Library implements Serializable {
                     System.out.println("Incorrect input.");
                     break;
             }
+        }
+    }
+
+    private ArrayList<Book> returnAvailableBooksList(){
+        ArrayList<Book> availableBooks = new ArrayList<>();
+        for(Book book : booksInLibrary){
+            if(book.isAvailable()){
+                availableBooks.add(book);
+            }
+        }
+        if(!availableBooks.isEmpty()) {
+            return availableBooks;
+        }
+        System.out.println("There are no available books for the moment.");
+        return null;
+    }
+    private void printSortedBooks(){
+        for(Book book : Objects.requireNonNull(returnAvailableBooksList())){
+            System.out.println(book);
         }
     }
 
@@ -108,16 +142,6 @@ public class Library implements Serializable {
                 System.out.println(book);
             }
         }
-    }
-
-    private Book findBookByName(String name) {
-        for (Book book : booksInLibrary) {
-            if (name.equals(book.getTitle())) {
-                return book;
-            }
-        }
-        System.out.println("Error! Book not found!");
-        return null;
     }
 
     private void registerUser() {
@@ -150,7 +174,6 @@ public class Library implements Serializable {
         }
     }
 
-
     private void logInUser() {
         System.out.println("Enter username: ");
         String username = scanner.nextLine();
@@ -179,6 +202,8 @@ public class Library implements Serializable {
     private void showAllBooks(ArrayList<Book> books) {
         for (Book book : books) {
             System.out.println(book);
+            System.out.println(book.getSummary());
+            System.out.println("_________________________________________________");
         }
     }
 
@@ -194,7 +219,6 @@ public class Library implements Serializable {
         booksInLibrary.add(new Book("Java For Dummies 7th Edition", "Barry Burd", "A new edition of the bestselling guide to Java If you want to learn to speak the world s most popular programming language like a native, Java For Dummies is your ideal companion"));
         users.add(new Admin("Admin", "admin", "admin@bookworms.com"));
         users.add(new User("Mantas", "zz", "s@d"));
-
     }
 }
 
