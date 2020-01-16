@@ -92,15 +92,19 @@ public class User extends Person {
     }
 
     public void borrowBook(Book book) {
-        if (book != null) {
-            borrowedBooks.add(book);
-            book.setAvailable(false);
-            book.startReminder();
-            System.out.println("You have borrowed: " + book.getTitle());
-            System.out.println(book.getTitle() + " Should be returned: ");
-            book.showDueTime();
-        } else {
-            System.out.println("Error! Book could not be found.");
+        if(borrowedBooks.size() <= 3) {
+            if (book != null) {
+                borrowedBooks.add(book);
+                book.setAvailable(false);
+                book.startReminder();
+                System.out.println("You have borrowed: " + book.getTitle());
+                System.out.println(book.getTitle() + " Should be returned: ");
+                book.showDueTime();
+            } else {
+                System.out.println("Error! Book could not be found.");
+            }
+        }else{
+            System.out.println("Book limit reached. Return one of the books you borrowed book if you wish to borrow this one.");
         }
     }
 
@@ -108,8 +112,5 @@ public class User extends Person {
         return borrowedBooks;
     }
 
-    public void setBorrowedBooks(ArrayList<Book> borrowedBooks) {
-        this.borrowedBooks = borrowedBooks;
-    }
 }
 

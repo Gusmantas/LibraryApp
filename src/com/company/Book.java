@@ -30,24 +30,12 @@ public class Book implements Serializable {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
-        this.writer = writer;
-    }
-
     public String getSummary() {
         return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
     }
 
     public boolean isAvailable() {
