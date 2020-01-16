@@ -45,26 +45,37 @@ public class Admin extends Person {
                     System.out.println("[1] Search for user and see his/hers borrowed books: ");
                     System.out.println("To exit, hit <enter>");
                     String adminChoice = scanner.nextLine();
-                    if (adminChoice.equals("1")) {
-                        System.out.println("Enter username: ");
-                        String username = scanner.nextLine();
-                        User user = findUserByName(username, listOfUsers);
-                        System.out.println("____________________________");
-                        System.out.println("Books borrowed by " + user.getName() + ": ");
-                        user.showBorrowedBooks();
-                        System.out.println("____________________________");
+                    try {
+                        if (adminChoice.equals("1")) {
+                            System.out.println("Enter username: ");
+                            String username = scanner.nextLine();
+                            User user = getUserByName(listOfUsers, username);
+                            System.out.println("____________________________");
+                            System.out.println("Books borrowed by " + user.getName() + ": ");
+                            user.showBorrowedBooks();
+                            System.out.println("\n");
+                            System.out.println("____________________________");
+                        }
+                    } catch (NullPointerException ex) {
+                        System.out.println("User not found. Check spelling.");
                     }
                     break;
                 case "5":
                     printUsersAndTheirBorrowedBooks(listOfUsers);
                     break;
-                    /*
+
                 case "6":
+                    printAllUsers(listOfUsers);
+                    try {
+                        System.out.println("Enter username of a user u wish to remove: ");
+                        String userToRemove = scanner.nextLine();
+                        listOfUsers.remove(getUserByName(listOfUsers, userToRemove));
+                        System.out.println(userToRemove + " removed successfully.");
+                    } catch (Exception ex) {
+                        System.out.println("User not found, check spelling.");
+                    }
                     break;
                 case "7":
-                    break;
-                     */
-                case "8":
                     System.out.println("Bye!");
                     isRunning = false;
                     break;
@@ -73,6 +84,17 @@ public class Admin extends Person {
                     break;
             }
         }
+    }
+
+    private User getUserByName(ArrayList<Person> persons, String name) {
+        for (Person user : persons) {
+            if (user.getName().equals(name)) {
+                if (user instanceof User) {
+                    return (User) user;
+                }
+            }
+        }
+        return null;
     }
 
     private void printUsersAndTheirBorrowedBooks(ArrayList<Person> users) {
@@ -103,29 +125,14 @@ public class Admin extends Person {
             }
         }
     }
-
-    public User findUserByName(String name, ArrayList<Person> persons) {
-        ArrayList<User> users = new ArrayList<>();
-        for (Person person : persons) {
-            if (person instanceof User) {
-                users.add((User) person);
-            }for (User user : users) {
-                if (user.getName().toLowerCase().contains(name.toLowerCase())) {
-                    return user;
-                }
-            }
-        }
-        System.out.println(name + " not found.");
-        return null;
-    }
-
+    
     //Duplicated method. Copy also found in User class
     public Book findBookByTitleOrAuthor(String name, ArrayList<Book> arrayList) {
         for (Book book : arrayList) {
             if (book.getTitle().toLowerCase().contains(name.toLowerCase()) || book.getWriter().toLowerCase().contains(name.toLowerCase()))
                 return book;
         }
-        System.out.println(name + " not found.");
+        System.out.println(name + " not found. Check spelling.");
         return null;
     }
 

@@ -12,18 +12,7 @@ public class User extends Person {
     }
 
 
-    public void showBorrowedBooks() {
-        if (!borrowedBooks.isEmpty()) {
-            for (Book book : borrowedBooks) {
-                System.out.println(book);
-            }
-        } else {
-            System.out.println("There isn't any borrowed books yet.");
-        }
-    }
-
-
-    public void userInfoMenu(User user) {
+    public void userInfoMenu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("[1] See my borrowed books");
         System.out.println("[2] See due time for a book");
@@ -38,6 +27,10 @@ public class User extends Person {
                 break;
             case "3":
                 try {
+                    showBorrowedBooks();
+                    if(borrowedBooks.isEmpty()){
+                        break;
+                    }
                     System.out.println("Enter title of the book you wish to return: ");
                     String bookTitle = scanner.nextLine();
                     returnBookToLibrary(findBookByTitleOrAuthor(bookTitle, borrowedBooks));
@@ -82,12 +75,21 @@ public class User extends Person {
         }
     }
 
+    public void showBorrowedBooks() {
+        if (!borrowedBooks.isEmpty()) {
+            for (Book book : borrowedBooks) {
+                System.out.println(book);
+            }
+        } else {
+            System.out.println("There isn't any borrowed books yet.");
+        }
+    }
+
     public Book findBookByTitleOrAuthor(String name, ArrayList<Book> arrayList) {
         for (Book book : arrayList) {
             if (book.getTitle().toLowerCase().contains(name.toLowerCase()) || book.getWriter().toLowerCase().contains(name.toLowerCase()))
                 return book;
         }
-        System.out.println(name + " not found.");
         return null;
     }
 

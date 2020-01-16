@@ -77,7 +77,7 @@ public class Library implements Serializable {
                     System.out.println(currentUser.findBookByTitleOrAuthor(searchedBook, booksInLibrary).getSummary());
                     break;
                 case "5":
-                    currentUser.userInfoMenu(currentUser);
+                    currentUser.userInfoMenu();
                     break;
                 case "6":
                     FileUtility.writeObject(this, "saveLibrary.ser");
@@ -194,9 +194,7 @@ public class Library implements Serializable {
         booksInLibrary.add(new Book("Java For Dummies 7th Edition", "Barry Burd", "A new edition of the bestselling guide to Java If you want to learn to speak the world s most popular programming language like a native, Java For Dummies is your ideal companion"));
         users.add(new Admin("Admin", "admin", "admin@bookworms.com"));
         users.add(new User("Mantas", "zz", "s@d"));
-        users.add(new User("a", "b", "s@d"));
-        users.add(new User("b", "c", "s@d"));
-        users.add(new User("c", "d", "s@d"));
+
     }
 }
 
