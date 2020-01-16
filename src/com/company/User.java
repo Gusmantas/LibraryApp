@@ -6,7 +6,6 @@ import java.util.Scanner;
 public class User extends Person {
 
     private ArrayList<Book> borrowedBooks = new ArrayList<>();
-    private transient Scanner scanner = new Scanner(System.in);
 
     public User(String name, String password, String email) {
         super(name, password, email);
@@ -25,6 +24,7 @@ public class User extends Person {
 
 
     public void userInfoMenu(User user) {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("[1] See my borrowed books");
         System.out.println("[2] See due time for a book");
         System.out.println("[3] Return a book");
@@ -68,6 +68,7 @@ public class User extends Person {
     }
 
     private void getDueTimeOfBook() {
+        Scanner scanner = new Scanner(System.in);
         try {
             showBorrowedBooks();
             System.out.println("Enter title of a book: ");
@@ -107,6 +108,8 @@ public class User extends Person {
         return borrowedBooks;
     }
 
-
+    public void setBorrowedBooks(ArrayList<Book> borrowedBooks) {
+        this.borrowedBooks = borrowedBooks;
+    }
 }
 

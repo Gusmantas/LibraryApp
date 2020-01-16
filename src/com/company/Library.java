@@ -18,13 +18,13 @@ public class Library implements Serializable {
 
     public Library() {
         loadProgress();
-        addStartingBooksAndAdminToLibrary();
         logInOrRegisterMenu();
     }
 
     private void logInOrRegisterMenu() {
         boolean isRunning = true;
         while (isRunning) {
+            System.out.println(users);
             System.out.println("Welcome to BooK-Worms library!");
             System.out.println("______________________________");
             System.out.println("[1] Log in.");
@@ -80,7 +80,7 @@ public class Library implements Serializable {
                     currentUser.userInfoMenu(currentUser);
                     break;
                 case "6":
-                    FileUtility.writeObject(this, "saveStoreProgress.ser");
+                    FileUtility.writeObject(this, "saveLibrary.ser");
                     System.out.println("Hope to see you soon!");
                     System.exit(0);
                     break;
@@ -93,11 +93,13 @@ public class Library implements Serializable {
 
     private void loadProgress() {
 
-        Path file = new File("saveStoreProgress.ser").toPath();
+        Path file = new File("saveLibrary.ser").toPath();
         if (Files.exists(file)) {
-            Library libraryFromFile = (Library) FileUtility.readObject("saveStoreProgress.ser");
+            Library libraryFromFile = (Library) FileUtility.readObject("saveLibrary.ser");
             this.users = libraryFromFile.users;
             this.booksInLibrary = libraryFromFile.booksInLibrary;
+        } else {
+            addStartingBooksAndAdminToLibrary();
         }
     }
 
@@ -161,7 +163,7 @@ public class Library implements Serializable {
                     currentAdmin = (Admin) user;
                     System.out.println("Welcome back, Librarian!");
                     currentAdmin.adminMenu(users, booksInLibrary);
-                    FileUtility.writeObject(this, "saveStoreProgress.ser");
+                    FileUtility.writeObject(this, "saveLibrary.ser");
                     System.exit(0);
                     break;
                 } else if (user instanceof User) {
