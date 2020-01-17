@@ -23,11 +23,11 @@ public class Library implements Serializable {
     private void logInOrRegisterMenu() {
         boolean isRunning = true;
         while (isRunning) {
-            System.out.println(users);
             System.out.println("Welcome to BooK-Worms library!");
             System.out.println("______________________________");
             System.out.println("[1] Log in.");
             System.out.println("[2] Register user.");
+            System.out.println("[3] Exit");
             String userInput = scanner.nextLine();
             switch (userInput) {
                 case "1":
@@ -35,6 +35,10 @@ public class Library implements Serializable {
                     break;
                 case "2":
                     registerUser();
+                    break;
+                case "3":
+                    System.out.println("Bye!");
+                    isRunning = false;
                     break;
                 default:
                     System.out.println("Incorrect input. You must enter number '1' or '2'");
@@ -53,7 +57,7 @@ public class Library implements Serializable {
             System.out.println("[4] Search for books");
             System.out.println("[5] Sort available books");
             System.out.println("[6] My page");
-            System.out.println("[7] Exit store");
+            System.out.println("[7] Log out ");
             String userInput = scanner.nextLine();
             switch (userInput) {
                 case "1":
@@ -97,7 +101,9 @@ public class Library implements Serializable {
                 case "7":
                     FileUtility.writeObject(this, "saveLibrary.ser");
                     System.out.println("Hope to see you soon!");
-                    System.exit(0);
+                    currentUser = null;
+                    isMenuOn = false;
+                    //System.exit(0);
                     break;
                 default:
                     System.out.println("Incorrect input.");
@@ -153,7 +159,7 @@ public class Library implements Serializable {
         } else {
             System.out.println("Enter your email address: ");
             emailAddress = scanner.nextLine();
-            String emailValidationRegex = "^(.+)@(.+)$";
+            String emailValidationRegex = "[\\w]{3,10}@[\\w]{3,10}\\.[a-zA-Z]{2,8}";
             Pattern pattern = Pattern.compile(emailValidationRegex);
             Matcher emailMatchesRegex = pattern.matcher(emailAddress);
             if (!emailMatchesRegex.matches()) {
@@ -218,7 +224,6 @@ public class Library implements Serializable {
         booksInLibrary.add(new Book("The Richest Man in Babylon", "George S. Clason", "Save at least 10 percent of everything you earn and do not confuse your necessary expenses with your desires."));
         booksInLibrary.add(new Book("Java For Dummies 7th Edition", "Barry Burd", "A new edition of the bestselling guide to Java If you want to learn to speak the world s most popular programming language like a native, Java For Dummies is your ideal companion"));
         users.add(new Admin("Admin", "admin", "admin@bookworms.com"));
-        users.add(new User("Mantas", "zz", "s@d"));
+        users.add(new User("Mantas", "zz", "mantas@gmail.com"));
     }
 }
-

@@ -88,6 +88,7 @@ public class User extends Person {
         for (Book book : arrayList) {
             if (book.getTitle().toLowerCase().contains(name.toLowerCase()) || book.getWriter().toLowerCase().contains(name.toLowerCase()))
                 return book;
+
         }
         return null;
     }
