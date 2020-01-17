@@ -1,6 +1,7 @@
 package com.company;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public abstract class Person implements Serializable {
     private String name, password, email;
@@ -11,12 +12,21 @@ public abstract class Person implements Serializable {
         this.email = email;
     }
 
+
     public String getName() {
         return name;
     }
 
     public String getPassword() {
         return password;
+    }
+
+    public Book findBookByTitleOrAuthor(String name, ArrayList<Book> arrayList) {
+        for (Book book : arrayList) {
+            if (book.getTitle().toLowerCase().contains(name.toLowerCase()) || book.getWriter().toLowerCase().contains(name.toLowerCase()))
+                return book;
+        }
+        return null;
     }
 
 

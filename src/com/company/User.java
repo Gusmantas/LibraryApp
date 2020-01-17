@@ -1,5 +1,7 @@
 package com.company;
 
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -9,7 +11,6 @@ public class User extends Person {
     public User(String name, String password, String email) {
         super(name, password, email);
     }
-
 
     public void userInfoMenu() {
         Scanner scanner = new Scanner(System.in);
@@ -27,7 +28,7 @@ public class User extends Person {
             case "3":
                 try {
                     showBorrowedBooks();
-                    if(borrowedBooks.isEmpty()){
+                    if (borrowedBooks.isEmpty()) {
                         break;
                     }
                     System.out.println("Enter title of the book you wish to return: ");
@@ -43,7 +44,19 @@ public class User extends Person {
         }
     }
 
-    public void returnBookToLibrary(Book book) {
+    public void getBookDueTimeReminder(){
+        if(borrowedBooks != null) {
+            for (Book book : borrowedBooks) {
+                if (LocalDateTime.now().isAfter(book.getBookDeadline())) {
+                    System.out.println("________________________________________________");
+                    System.out.println("Due time for \"" + book.getTitle() + "\" is out.");
+                    System.out.println("________________________________________________");
+                }
+            }
+        }
+    }
+
+    private void returnBookToLibrary(Book book) {
         borrowedBooks.remove(book);
         book.setAvailable(true);
         System.out.println(book.getTitle() + " returned to library");
@@ -67,8 +80,6 @@ public class User extends Person {
             String bookTitle = scanner.nextLine();
             System.out.println("Book to be returned on: ");
             findBookByTitleOrAuthor(bookTitle, borrowedBooks).showDueTime();
-            //Not sure about this one. How to display reminder for an overdue book?
-            findBookByTitleOrAuthor(bookTitle, borrowedBooks).startReminder();
         } catch (Exception ex) {
             System.out.println("Book title incorrect. Try again.");
         }
@@ -84,35 +95,21 @@ public class User extends Person {
         }
     }
 
-    public Book findBookByTitleOrAuthor(String name, ArrayList<Book> arrayList) {
-        for (Book book : arrayList) {
-            if (book.getTitle().toLowerCase().contains(name.toLowerCase()) || book.getWriter().toLowerCase().contains(name.toLowerCase()))
-                return book;
-
-        }
-        return null;
-    }
-
     public void borrowBook(Book book) {
-        if(borrowedBooks.size() <= 3) {
+        if (borrowedBooks.size() <= 3) {
             if (book != null) {
                 borrowedBooks.add(book);
                 book.setAvailable(false);
-                book.startReminder();
+                book.setBookDeadline();
                 System.out.println("You have borrowed: " + book.getTitle());
                 System.out.println(book.getTitle() + " Should be returned: ");
                 book.showDueTime();
             } else {
                 System.out.println("Error! Book could not be found.");
             }
-        }else{
+        } else {
             System.out.println("Book limit reached. Return one of the books you borrowed book if you wish to borrow this one.");
         }
     }
-
-    public ArrayList<Book> getBorrowedBooks() {
-        return borrowedBooks;
-    }
-
 }
 

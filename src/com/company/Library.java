@@ -57,7 +57,7 @@ public class Library implements Serializable {
             System.out.println("[4] Search for books");
             System.out.println("[5] Sort available books");
             System.out.println("[6] My page");
-            System.out.println("[7] Log out ");
+            System.out.println("[7] Exit ");
             String userInput = scanner.nextLine();
             switch (userInput) {
                 case "1":
@@ -75,23 +75,28 @@ public class Library implements Serializable {
                     showAvailableBooks();
                     break;
                 case "4":
-                    System.out.println("Enter book title or author: ");
-                    String searchedBook = scanner.nextLine();
-                    System.out.println(currentUser.findBookByTitleOrAuthor(searchedBook, booksInLibrary));
-                    System.out.println("Summary: ");
-                    System.out.println(currentUser.findBookByTitleOrAuthor(searchedBook, booksInLibrary).getSummary());
-                    break;
+                        System.out.println("Enter book title or author: ");
+                        String searchedBook = scanner.nextLine();
+                        Book book = currentUser.findBookByTitleOrAuthor(searchedBook, booksInLibrary);
+                        if(book != null) {
+                            System.out.println(book);
+                            System.out.println("Summary: ");
+                            System.out.println(currentUser.findBookByTitleOrAuthor(searchedBook, booksInLibrary).getSummary());
+                        }else{
+                            System.out.println("Book not available at the moment. Search for another book.");
+                        }
+                        break;
                 case "5":
                     System.out.println("[1] Sort books by title");
                     System.out.println("[2] Sort books by author");
                     String sortBooksByTitleOrAuthor = scanner.nextLine();
-                    if(sortBooksByTitleOrAuthor.equals("1")){
+                    if (sortBooksByTitleOrAuthor.equals("1")) {
                         Objects.requireNonNull(returnAvailableBooksList()).sort(Comparator.comparing(Book::getTitle));
                         printSortedBooks();
-                    }else if(sortBooksByTitleOrAuthor.equals("2")){
+                    } else if (sortBooksByTitleOrAuthor.equals("2")) {
                         Objects.requireNonNull(returnAvailableBooksList()).sort(Comparator.comparing(Book::getWriter));
                         printSortedBooks();
-                    }else{
+                    } else {
                         System.out.println("Incorrect input. Try again.");
                     }
                     break;
@@ -101,9 +106,7 @@ public class Library implements Serializable {
                 case "7":
                     FileUtility.writeObject(this, "saveLibrary.ser");
                     System.out.println("Hope to see you soon!");
-                    currentUser = null;
-                    isMenuOn = false;
-                    //System.exit(0);
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("Incorrect input.");
@@ -112,21 +115,22 @@ public class Library implements Serializable {
         }
     }
 
-    private ArrayList<Book> returnAvailableBooksList(){
+    private ArrayList<Book> returnAvailableBooksList() {
         ArrayList<Book> availableBooks = new ArrayList<>();
-        for(Book book : booksInLibrary){
-            if(book.isAvailable()){
+        for (Book book : booksInLibrary) {
+            if (book.isAvailable()) {
                 availableBooks.add(book);
             }
         }
-        if(!availableBooks.isEmpty()) {
+        if (!availableBooks.isEmpty()) {
             return availableBooks;
         }
         System.out.println("There are no available books for the moment.");
         return null;
     }
-    private void printSortedBooks(){
-        for(Book book : Objects.requireNonNull(returnAvailableBooksList())){
+
+    private void printSortedBooks() {
+        for (Book book : Objects.requireNonNull(returnAvailableBooksList())) {
             System.out.println(book);
         }
     }
@@ -174,7 +178,6 @@ public class Library implements Serializable {
                 } else {
                     users.add(new User(username, password, emailAddress));
                     System.out.println("User successfully registered!");
-                    System.out.println(users);
                 }
             }
         }
@@ -197,6 +200,7 @@ public class Library implements Serializable {
                 } else if (user instanceof User) {
                     System.out.println("Welcome back, " + username + "!");
                     currentUser = (User) user;
+                    currentUser.getBookDueTimeReminder();
                     mainMenu();
                     break;
                 }

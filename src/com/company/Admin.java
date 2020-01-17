@@ -27,11 +27,11 @@ public class Admin extends Person {
                     System.out.println("[1] See all books");
                     System.out.println("[2] See borrowed books");
                     String chooseBooks = scanner.nextLine();
-                    if(chooseBooks.equals("1")){
+                    if (chooseBooks.equals("1")) {
                         printAllLibraryBooks(libraryBooks);
-                    }else if(chooseBooks.equals("2")){
-                    seeBorrowedBooks(libraryBooks);
-                    }else{
+                    } else if (chooseBooks.equals("2")) {
+                        seeBorrowedBooks(libraryBooks);
+                    } else {
                         System.out.println("Incorrect input. Try again.");
                     }
                     break;
@@ -55,7 +55,7 @@ public class Admin extends Person {
                     System.out.println("__________________________________________________________________________");
                     System.out.println("[1] Search for user and see his/hers borrowed books. To exit, hit <ENTER> ");
                     String adminChoice = scanner.nextLine();
-                   try {
+                    try {
                         if (adminChoice.equals("1")) {
                             System.out.println("Enter username: ");
                             String username = scanner.nextLine();
@@ -135,16 +135,6 @@ public class Admin extends Person {
                 System.out.println(person);
             }
         }
-    }
-    
-    //Duplicated method. Copy also found in User class
-    public Book findBookByTitleOrAuthor(String name, ArrayList<Book> arrayList) {
-        for (Book book : arrayList) {
-            if (book.getTitle().toLowerCase().contains(name.toLowerCase()) || book.getWriter().toLowerCase().contains(name.toLowerCase()))
-                return book;
-        }
-        System.out.println(name + " not found. Check spelling.");
-        return null;
     }
 
     private void removeBookFromLibrary(String name, ArrayList<Book> libraryBooks) {
