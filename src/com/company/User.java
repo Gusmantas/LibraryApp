@@ -1,7 +1,6 @@
 package com.company;
 
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -44,8 +43,8 @@ public class User extends Person {
         }
     }
 
-    public void getBookDueTimeReminder(){
-        if(borrowedBooks != null) {
+    public void getBookDueTimeReminder() {
+        if (borrowedBooks != null) {
             for (Book book : borrowedBooks) {
                 if (LocalDateTime.now().isAfter(book.getBookDeadline())) {
                     System.out.println("________________________________________________");
@@ -60,16 +59,6 @@ public class User extends Person {
         borrowedBooks.remove(book);
         book.setAvailable(true);
         System.out.println(book.getTitle() + " returned to library");
-    }
-
-    public Book searchBookByName(String name) {
-        for (Book book : borrowedBooks) {
-            if (name.equals(book.getTitle())) {
-                return book;
-            }
-        }
-        System.out.println(name + " not found.");
-        return null;
     }
 
     private void getDueTimeOfBook() {

@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-
 public class FileUtility {
 
     public static void writeObject(Object object, String fileName) {
@@ -21,7 +20,6 @@ public class FileUtility {
         }
     }
 
-    //Read Object from file
     public static Object readObject(String fileName) {
         ObjectInputStream objectinputstream = null;
         Object object = null;

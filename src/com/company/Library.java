@@ -75,27 +75,25 @@ public class Library implements Serializable {
                     showAvailableBooks();
                     break;
                 case "4":
-                        System.out.println("Enter book title or author: ");
-                        String searchedBook = scanner.nextLine();
-                        Book book = currentUser.findBookByTitleOrAuthor(searchedBook, booksInLibrary);
-                        if(book != null) {
-                            System.out.println(book);
-                            System.out.println("Summary: ");
-                            System.out.println(currentUser.findBookByTitleOrAuthor(searchedBook, booksInLibrary).getSummary());
-                        }else{
-                            System.out.println("Book not available at the moment. Search for another book.");
-                        }
-                        break;
+                    System.out.println("Enter book title or author: ");
+                    String searchedBook = scanner.nextLine();
+                    Book book = currentUser.findBookByTitleOrAuthor(searchedBook, booksInLibrary);
+                    if (book != null) {
+                        System.out.println(book);
+                        System.out.println("Summary: ");
+                        System.out.println(currentUser.findBookByTitleOrAuthor(searchedBook, booksInLibrary).getSummary());
+                    } else {
+                        System.out.println("Book not available at the moment. Search for another book.");
+                    }
+                    break;
                 case "5":
                     System.out.println("[1] Sort books by title");
                     System.out.println("[2] Sort books by author");
                     String sortBooksByTitleOrAuthor = scanner.nextLine();
                     if (sortBooksByTitleOrAuthor.equals("1")) {
-                        Objects.requireNonNull(returnAvailableBooksList()).sort(Comparator.comparing(Book::getTitle));
-                        printSortedBooks();
+                        sortBooksByTitle();
                     } else if (sortBooksByTitleOrAuthor.equals("2")) {
-                        Objects.requireNonNull(returnAvailableBooksList()).sort(Comparator.comparing(Book::getWriter));
-                        printSortedBooks();
+                        sortBookByAuthor();
                     } else {
                         System.out.println("Incorrect input. Try again.");
                     }
@@ -129,9 +127,25 @@ public class Library implements Serializable {
         return null;
     }
 
-    private void printSortedBooks() {
-        for (Book book : Objects.requireNonNull(returnAvailableBooksList())) {
+    private void sortBooksByTitle() {
+        ArrayList<Book> availableBooks = returnAvailableBooksList();
+        Comparator<Book> compareByTitle = Comparator.comparing(Book::getTitle);
+        assert availableBooks != null;
+        availableBooks.sort(compareByTitle);
+        for (Book book : availableBooks) {
             System.out.println(book);
+            System.out.println("_________________________");
+        }
+    }
+
+    private void sortBookByAuthor() {
+        ArrayList<Book> availableBooks = returnAvailableBooksList();
+        Comparator<Book> compareByAuthor = Comparator.comparing(Book::getWriter);
+        assert availableBooks != null;
+        availableBooks.sort(compareByAuthor);
+        for (Book book : availableBooks) {
+            System.out.println(book);
+            System.out.println("_________________________");
         }
     }
 
@@ -228,6 +242,6 @@ public class Library implements Serializable {
         booksInLibrary.add(new Book("The Richest Man in Babylon", "George S. Clason", "Save at least 10 percent of everything you earn and do not confuse your necessary expenses with your desires."));
         booksInLibrary.add(new Book("Java For Dummies 7th Edition", "Barry Burd", "A new edition of the bestselling guide to Java If you want to learn to speak the world s most popular programming language like a native, Java For Dummies is your ideal companion"));
         users.add(new Admin("Admin", "admin", "admin@bookworms.com"));
-        users.add(new User("Mantas", "zz", "mantas@gmail.com"));
+        users.add(new User("Test", "test", "test@test.com"));
     }
 }

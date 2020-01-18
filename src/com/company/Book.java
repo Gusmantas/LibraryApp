@@ -4,12 +4,11 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-public class Book implements Serializable, Comparable {
+public class Book implements Serializable {
 
     private String title, writer, summary;
     private boolean isAvailable = true;
     private LocalDateTime bookDeadline;
-
 
     public Book(String title, String writer, String summary) {
         this.title = title;
@@ -17,9 +16,8 @@ public class Book implements Serializable, Comparable {
         this.summary = summary;
     }
 
-    /*#Due books time is set to 1 minute for debugging.
-      #Kept "LocalDateTime bookDeadline;" as field variable. Deadline is now possible for all books.
-     */
+    //Due books time is set to 1 minute for debugging.
+    //Kept "LocalDateTime bookDeadline;" as field variable. Different deadline is now set for all borrowed books.
     public void setBookDeadline() {
         Timestamp currentTime = Timestamp.valueOf(LocalDateTime.now());
         LocalDateTime deadline = currentTime.toLocalDateTime().plusMinutes(1);
@@ -59,9 +57,4 @@ public class Book implements Serializable, Comparable {
         return String.format("Title: %s. Author: %s.", title, writer);
     }
 
-
-    @Override
-    public int compareTo(Object o) {
-        return 0;
-    }
 }
