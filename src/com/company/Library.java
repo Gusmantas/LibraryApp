@@ -57,7 +57,7 @@ public class Library implements Serializable {
             System.out.println("[4] Search for books");
             System.out.println("[5] Sort available books");
             System.out.println("[6] My page");
-            System.out.println("[7] Exit ");
+            System.out.println("[7] Save & Exit ");
             String userInput = scanner.nextLine();
             switch (userInput) {
                 case "1":

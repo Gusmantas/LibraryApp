@@ -20,7 +20,7 @@ public class Admin extends Person {
             System.out.println("[4] See all users, or search for one");
             System.out.println("[5] See all borrowed books");
             System.out.println("[6] Remove user");
-            System.out.println("[7] Exit");
+            System.out.println("[7] Save & Exit");
             String adminInput = scanner.nextLine();
             switch (adminInput) {
                 case "1":
