@@ -86,7 +86,7 @@ public class User extends Person {
 
     public void borrowBook(Book book) {
         if (borrowedBooks.size() <= 3) {
-            if (book != null) {
+            if (book != null && book.isAvailable()) {
                 borrowedBooks.add(book);
                 book.setAvailable(false);
                 book.setBookDeadline();

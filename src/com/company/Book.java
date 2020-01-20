@@ -20,7 +20,7 @@ public class Book implements Serializable {
     //Kept "LocalDateTime bookDeadline;" as field variable. Different deadline is now set for all borrowed books.
     public void setBookDeadline() {
         Timestamp currentTime = Timestamp.valueOf(LocalDateTime.now());
-        LocalDateTime deadline = currentTime.toLocalDateTime().plusMinutes(1);
+        LocalDateTime deadline = currentTime.toLocalDateTime().plusSeconds(10);
         bookDeadline = deadline;
     }
 
