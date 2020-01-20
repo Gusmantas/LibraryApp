@@ -41,7 +41,7 @@ public class Library implements Serializable {
                     isRunning = false;
                     break;
                 default:
-                    System.out.println("Incorrect input. You must enter number '1' or '2'");
+                    System.out.println("Incorrect input. You must enter number between '1' and '3'");
                     break;
             }
         }
