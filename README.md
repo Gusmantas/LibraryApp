@@ -1,2 +1,2 @@
 # LibraryApp
-Simple library app (beginner)
+Simple library app (console-based) written in Java (school assignment)
